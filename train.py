@@ -1,3 +1,4 @@
+
 import time
 import pickle
 import numpy as np
@@ -75,11 +76,15 @@ def learn(model, train_loader, frames):
                                 train_loader,
                                 frames,
                                 )
+    spikes_t, labels_t = inference(model,
+                               test_loader,
+                               frames,
+                               )
     # print(spikes.shape, labels.shape)
-    train_rs = spikes[:300]
-    train_label = labels[:300]
-    test_rs = spikes[300:]
-    test_label = labels[300:]
+    train_rs = spikes#[:300]
+    train_label = labels#[:300]
+    test_rs = spikes_t#[300:]
+    test_label = labels_t#[300:]
     # val_rs = spikes[400:]
     # val_label = labels[400:]
     tr_score, val_score, = learn_readout(train_rs.T, 
@@ -150,4 +155,23 @@ if __name__ == '__main__':
     run_time = time.strftime("%Y.%m.%d-%H-%M-%S", time.localtime())
     
     # param_search(run_time)
-    inference()
+    from data import MNIST_generation
+
+    # ray.init()
+
+    train_loader, test_loader = MNIST_generation(train_num=300,
+                                                 test_num=50,
+                                                 batch_size=16)
+
+    model = RC(N_input=28 * 28,
+               N_hidden=1000,
+               N_output=10,
+               alpha=0.8,
+               decay=0.5,
+               threshold=1.3,
+               R=0.2,
+               p=0.25,
+               gamma=1.0,
+
+               )
+    print(learn(model, train_loader, frames=10))

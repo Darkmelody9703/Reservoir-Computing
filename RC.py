@@ -35,7 +35,7 @@ class RC:
         self.p = p
         self.gamma = gamma
         self.random_init = True, # 初始状态是否随机初始化
-        
+
         self.reset()
     
     def _set_decay(self,):
@@ -88,10 +88,10 @@ class RC:
         spike [batch, N_hid]
         '''
         # print(mem.shape, spike.shape, x.shape)
-        a = np.random.rand(200)
+        a = np.random.rand(1000)
         decay = np.array([a for i in range(75)])
-        tmp = mem*a
-        print(tmp.shape)
+        # tmp = mem*a
+        # print(tmp.shape)
         mem = mem * self.decay * (1-spike) + x
         spike = np.array(mem>self.thr, dtype=np.float32)
         return mem, spike
@@ -183,13 +183,13 @@ if __name__ == '__main__':
                N_output=10,
                alpha=0.8,
                decay=0.5,
-               threshold=1.3,
+               threshold=1.1,
                R=0.2,
                p=0.25,
                gamma=1.0,
                
                )
-    for i, (images, lables) in enumerate(train_loader):
+    for i, (images, labels) in enumerate(train_loader):
         enc_img = encoding(images, frames=20)
         mems, spike_train = model.forward_(enc_img)
         # r, y, spike_train = model.forward(enc_img)
@@ -201,6 +201,7 @@ if __name__ == '__main__':
         for j in range(4):
             plt.subplot(4,4,4*i+j+1)
             plt.hist(firing_rate[4*i+j,:])
+            plt.title(labels[4*i+j])
     plt.show()
     
     # learn(model, train_loader, frames=10)
