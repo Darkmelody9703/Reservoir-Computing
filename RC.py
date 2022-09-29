@@ -205,7 +205,7 @@ if __name__ == '__main__':
                gamma=1.0,
                sub_thr=False
                )
-    plt.figure()
+    fig = plt.figure()
     k = 0
     l = 0
     sw = 0
@@ -246,7 +246,7 @@ if __name__ == '__main__':
             break
 
 
-        plt.show()
+    plt.show()
     
     # learn(model, train_loader, frames=10)
     
