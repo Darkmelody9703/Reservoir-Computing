@@ -190,7 +190,7 @@ if __name__ == '__main__':
     from data import MNIST_generation
     # ray.init()
     
-    train_loader, test_loader = MNIST_generation(train_num=32,
+    train_loader, test_loader = MNIST_generation(train_num=200,
                                                  test_num=250,
                                                  batch_size=16)
     
@@ -205,25 +205,48 @@ if __name__ == '__main__':
                gamma=1.0,
                sub_thr=False
                )
+    plt.figure()
+    k = 0
+    l = 0
+    sw = 0
     for i, (images, labels) in enumerate(train_loader):
-        plt.imshow(images[0].squeeze(0))
-        plt.show()
-        print(labels[0])
         enc_img = encoding(images, frames=20)
         mems, spike_train = model.forward_(enc_img)
         # r, y, spike_train = model.forward(enc_img)
         firing_rate = spike_train.sum(0)/20
-    
-    
-    plt.figure()
-    for i in range(4):
-        for j in range(4):
-            plt.subplot(4,8,8*i+2*j+1)
-            plt.hist(firing_rate[4*i+j,:])
-            plt.title(labels[4*i+j])
-            plt.subplot(4,8,8*i+2*j+2)
-            plt.imshow(images[4*i+j].squeeze(0))
-    plt.show()
+        for e in range(images.shape[0]):
+            if (sw == 0):
+                if (labels[e] == torch.tensor(3)):
+                    plt.subplot(4, 8, 8 * k + 2 * l + 1)
+                    plt.hist(firing_rate[e,:])
+                    plt.title(labels[e])
+                    plt.subplot(4, 8, 8 * k + 2 * l + 2)
+                    plt.imshow(images[e].squeeze(0))
+                    l +=1
+                    if (l>3):
+                        l = 0
+                        k+=1
+                    if k==2:
+                        sw = 1
+            else:
+                if (labels[e] == torch.tensor(1)):
+                    plt.subplot(4, 8, 8 * k + 2 * l + 1)
+                    plt.hist(firing_rate[e,:])
+                    plt.title(labels[e])
+                    plt.subplot(4, 8, 8 * k + 2 * l + 2)
+                    plt.imshow(images[e].squeeze(0))
+                    l +=1
+                    if (l>3):
+                        l = 0
+                        k+=1
+                    if k==4:
+                        sw = 0
+                        break
+        if k == 4:
+            break
+
+
+        plt.show()
     
     # learn(model, train_loader, frames=10)
     
