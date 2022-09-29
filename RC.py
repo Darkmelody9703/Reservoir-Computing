@@ -198,16 +198,17 @@ if __name__ == '__main__':
                N_hidden=1000,
                N_output=10,
                alpha=0.8,
-               decay=0.5,
-               threshold=1.1,
                decay=None, # None for random decay of neurons
-               threshold=0.3,
+               threshold=0.4,
                R=0.2,
                p=0.25,
                gamma=1.0,
                sub_thr=False
                )
     for i, (images, labels) in enumerate(train_loader):
+        plt.imshow(images[0].squeeze(0))
+        plt.show()
+        print(labels[0])
         enc_img = encoding(images, frames=20)
         mems, spike_train = model.forward_(enc_img)
         # r, y, spike_train = model.forward(enc_img)
@@ -217,9 +218,11 @@ if __name__ == '__main__':
     plt.figure()
     for i in range(4):
         for j in range(4):
-            plt.subplot(4,4,4*i+j+1)
+            plt.subplot(4,8,8*i+2*j+1)
             plt.hist(firing_rate[4*i+j,:])
             plt.title(labels[4*i+j])
+            plt.subplot(4,8,8*i+2*j+2)
+            plt.imshow(images[4*i+j].squeeze(0))
     plt.show()
     
     # learn(model, train_loader, frames=10)
