@@ -16,7 +16,7 @@ if __name__ == '__main__':
                                                transform=transforms.ToTensor())
     train_num = 20
     assert train_num <= len(train_dataset)
-    idx = random.sample(list(range(len(train_dataset))), train_num)
+    idx = [i for i in range(20)]#random.sample(list(range(len(train_dataset))), train_num)
     train_dataset.data = train_dataset.data[idx]
     train_loader = torch.utils.data.DataLoader(train_dataset,
                                                batch_size=16,

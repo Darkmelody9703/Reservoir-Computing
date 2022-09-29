@@ -166,16 +166,16 @@ if __name__ == '__main__':
 
     # ray.init()
 
-    train_loader, test_loader = MNIST_generation(train_num=300,
-                                                 test_num=50,
+    train_loader, test_loader = MNIST_generation(train_num=100,
+                                                 test_num=48,
                                                  batch_size=16)
 
     model = RC(N_input=28 * 28,
                N_hidden=1000,
                N_output=10,
                alpha=0.8,
-               decay=0.5,
-               threshold=1.1,
+               decay=None,  # None for random decay of neurons
+               threshold=0.4,
                R=0.2,
                p=0.25,
                gamma=1.0,

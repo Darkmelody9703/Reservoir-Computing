@@ -36,7 +36,8 @@ def MNIST_generation(train_num=500, test_num=250, batch_size=1):
     
     # 只取一部分数据
     assert train_num<= len(train_dataset)
-    idx = random.sample(list(range(len(train_dataset))), train_num)
+    # idx = random.sample(list(range(len(train_dataset))), train_num)
+    idx = [i for i in range(train_num)]
     train_dataset.data = train_dataset.data[idx]
     
     train_loader = torch.utils.data.DataLoader(train_dataset, 
@@ -51,7 +52,8 @@ def MNIST_generation(train_num=500, test_num=250, batch_size=1):
     
     # 只取一部分数据
     assert test_num<= len(test_dataset)
-    idx = random.sample(list(range(len(test_dataset))), test_num)
+    # idx = random.sample(list(range(len(test_dataset))), test_num)
+    idx = [j for j in range(test_num)]
     test_dataset.data = test_dataset.data[idx]
     
     test_loader = torch.utils.data.DataLoader(test_dataset, 
