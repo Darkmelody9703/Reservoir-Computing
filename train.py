@@ -166,8 +166,8 @@ if __name__ == '__main__':
 
     # ray.init()
 
-    train_loader, test_loader = MNIST_generation(train_num=100,
-                                                 test_num=48,
+    train_loader, test_loader = MNIST_generation(train_num=350,
+                                                 test_num=200,
                                                  batch_size=16)
 
     model = RC(N_input=28 * 28,
