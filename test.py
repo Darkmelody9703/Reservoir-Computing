@@ -1,30 +1,30 @@
 from train import *
 import matplotlib.pyplot as plt
 from utils import *
+import torchvision
+import torchvision.transforms as transforms
+import random
 
 if __name__ == '__main__':
-    config = {
-        'alpha':0.8,
-        'decay':0,
-        'thr': 0.3,
-        'R': 0.2,
-        'p': 0.25,
-        'gamma': 1.0,
-    }
+    from data import MNIST_generation
 
-    model = config_model(config)
-    # print(1000**2-(model.A==0).sum())
-    # print(spectral_radius(model.A))
-    
-    # plt.imshow(model.A)
-    # plt.show()
-    # train_loader, test_loader = MNIST_generation(train_num=100,
-    #                                              test_num=250,
-    #                                              batch_size=13)
-    
-    # inference(model, train_loader, frames=20)
-    
-    t = time.time()
-    rollout(config)
-    print(time.time()-t)
+    # ray.init()
+
+    train_dataset = torchvision.datasets.MNIST(root='./data/',
+                                               train=True,
+                                               download=False,
+                                               transform=transforms.ToTensor())
+    train_num = 20
+    assert train_num <= len(train_dataset)
+    idx = random.sample(list(range(len(train_dataset))), train_num)
+    train_dataset.data = train_dataset.data[idx]
+    train_loader = torch.utils.data.DataLoader(train_dataset,
+                                               batch_size=16,
+                                               shuffle=True,
+                                               num_workers=0)
+    for i, (images, labels) in enumerate(train_loader):
+        plt.imshow(images[0].squeeze(0))
+        plt.show()
+        print(labels[0])
+        pass
 
